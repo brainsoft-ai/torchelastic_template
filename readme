@@ -1,0 +1,25 @@
+분산 멀티 GPU 환경에서 imagenet을 학습하는 예제
+ > 추후 다른 데이터 셋과 다른 모델을 적용하기 위함.
+
+
+key-value RPC(?) 역할을 해주는 서버가 필요
+ > etcd 를 사용
+ > server 실행 관련하여서는 server.sh 참고
+
+로컬 호스트를 찾을 수 없음.
+ > local hostname keyword : avahi, mdnsm, bonjour(apple)
+ > linux 환경에 기본적으로 적용 되는 것 같음.
+
+토치엘라스틱의 코드를 수정해야함.
+ > vim venv/lib/python3.6/site-packages/torch/distributed/rendezvous.py
+ > 172 라인 위에 """master_addr += '.local'"""
+ > hostname만 가지고는 에러가 발생하기 때문에 뒤에 .local을 추가해 줌으로 에러 수정.
+ > 제대로 된 해결책인지는 모르겠으나, 현재 상황에서 3대의 pc에서 분산하여 학습 하는 것을 확인.
+
+python script 실행 시 의문점
+ > NCCL 를 사용하길 권하는데 NCCL 설정을 변경하면 죽음
+ > GLOO 에서 WHATEVER IN IFCONFIG (like eth0 or something / eno1 사용 ) 
+
+
+/data : tiny (imagenet dataset downloads)[https://www.kaggle.com/c/tiny-imagenet/data]
+
